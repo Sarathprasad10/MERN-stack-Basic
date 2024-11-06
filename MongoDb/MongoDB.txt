@@ -1,0 +1,1541 @@
+Microsoft Windows [Version 10.0.22631.4317]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\LENOVO>mongosh
+Current Mongosh Log ID: 6729af5674586f248e0d818f
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.3.3
+Using MongoDB:          8.0.3
+Using Mongosh:          2.3.3
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2024-11-05T09:12:18.195+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+
+test> show dhs
+MongoshInvalidInputError: [COMMON-10001] 'dhs' is not a valid argument for "show".
+test> show dbs
+admin   40.00 KiB
+config  72.00 KiB
+local   72.00 KiB
+test> use newname
+switched to db newname
+newname> db.createCollection("mycollect")
+{ ok: 1 }
+newname> db.mycollect.insertOne({name:"Meenu",age:"36",profession:"Professor"})
+{
+  acknowledged: true,
+  insertedId: ObjectId('6729b1ab74586f248e0d8190')
+}
+newname> db.mycollect.insertOne({name:"Sarath",age:"22",profession:"Student"})
+{
+  acknowledged: true,
+  insertedId: ObjectId('6729b28074586f248e0d8191')
+}
+newname> db.mycollect.insertMany({name:"Pradeep",age:"31",profession:"Admin"},{name:"abey",age:"32"}{age:"35",profession:"teacher"})
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:91)
+
+> 1 | db.mycollect.insertMany({name:"Pradeep",age:"31",profession:"Admin"},{name:"abey",age:"32"}{age:"35",profession:"teacher"})
+    |                                                                                            ^
+  2 |
+
+newname> db.mycollect.insertMany({name:"Pradeep",age:"31",profession:"Admin"},{name:"abey",age:"32"},{age:"35",profession:"teacher"})
+MongoInvalidArgumentError: Argument "docs" must be an array of documents
+newname> db.mycollect.insertMany([{name:"Pradeep",age:"31",profession:"Admin"},{name:"abey",age:"32"},{age:"35",profession:"teacher"}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6729b3df74586f248e0d8192'),
+    '1': ObjectId('6729b3df74586f248e0d8193'),
+    '2': ObjectId('6729b3df74586f248e0d8194')
+  }
+}
+newname>
+(To exit, press Ctrl+C again or Ctrl+D or type .exit)
+newname> db.mycollect.find()
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  }
+]
+newname> db.mycollect.find(name("Sarath"))
+ReferenceError: name is not defined
+newname> db.mycollect.find(name:"Sarath")
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:22)
+
+> 1 | db.mycollect.find(name:"Sarath")
+    |                       ^
+  2 |
+
+newname> db.mycollect.find(name:'Sarath')
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:22)
+
+> 1 | db.mycollect.find(name:'Sarath')
+    |                       ^
+  2 |
+
+newname> db.mycollect.find(name,'Sarath')
+ReferenceError: name is not defined
+newname> db.mycollect.find(ObjectId('6729b28074586f248e0d8191'))
+[
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  }
+]
+newname> db.mycollect.find(name('Sarath'))
+ReferenceError: name is not defined
+newname> db.mycollect.find(name,('Sarath'))
+ReferenceError: name is not defined
+newname> db.mycollect.find(mycollect.name('Sarath'))
+ReferenceError: mycollect is not defined
+newname> db.mycollect.find(name_('Sarath'))
+ReferenceError: name_ is not defined
+newname> db.mycollect.find(name:'Sarath')
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:22)
+
+> 1 | db.mycollect.find(name:'Sarath')
+    |                       ^
+  2 |
+
+newname> db.mycollect.find(,name:'Sarath')
+Uncaught:
+SyntaxError: Unexpected token ','. (1:19)
+
+> 1 | db.mycollect.find(,name:'Sarath')
+    |                    ^
+  2 |
+
+newname> db.mycollect.find({name:'Sarath'})
+[
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  }
+]
+newname> db.mycollect.find({name:'Sarath'}$and{age:'22'})
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:33)
+
+> 1 | db.mycollect.find({name:'Sarath'}$and{age:'22'})
+    |                                  ^
+  2 |
+
+newname> db.mycollect.find({name:'Sarath'}$and:{age:'22'})
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:33)
+
+> 1 | db.mycollect.find({name:'Sarath'}$and:{age:'22'})
+    |                                  ^
+  2 |
+
+newname> db.mycollect.find([{name:'Sarath'}$and:{age:'22'}])
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:34)
+
+> 1 | db.mycollect.find([{name:'Sarath'}$and:{age:'22'}])
+    |                                   ^
+  2 |
+
+newname> db.mycollect.find($and:[{name:'Sarath'},{age:'22'}])
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:22)
+
+> 1 | db.mycollect.find($and:[{name:'Sarath'},{age:'22'}])
+    |                       ^
+  2 |
+
+newname> db.mycollect.find($and:[{age:'22'}])
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:22)
+
+> 1 | db.mycollect.find($and:[{age:'22'}])
+    |                       ^
+  2 |
+
+newname> db.mycollect.find({$and:[{age:'22'}]})
+[
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  }
+]
+newname> db.mycollect.find({$and:[{name:'Sarath'},{age:'22'}]})
+[
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  }
+]
+newname> db.mycollect.find({$or:[{name:'meenu'},{age:'32'}]})
+[
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  }
+]
+newname> db.mycollect.find({$gte:[{age:'10'},{age:'32'}]})
+MongoServerError[BadValue]: unknown top level operator: $gte. If you have a field name that starts with a '$' symbol, consider using $getField or $setField.
+newname> db.mycollect.find({$age:[{gte:'10'},{lte:'32'}]})
+MongoServerError[BadValue]: unknown top level operator: $age. If you have a field name that starts with a '$' symbol, consider using $getField or $setField.
+newname> db.mycollect.find({$age:{gte:'10'},{lte:'32'}})
+Uncaught:
+SyntaxError: Unexpected token (1:35)
+
+> 1 | db.mycollect.find({$age:{gte:'10'},{lte:'32'}})
+    |                                    ^
+  2 |
+
+newname> db.mycollect.find({$age:{gte:'10',lte:'32'})
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:43)
+
+> 1 | db.mycollect.find({$age:{gte:'10',lte:'32'})
+    |                                            ^
+  2 |
+
+newname> db.mycollect.find({age:{$gte:'10',$lte:'32'})
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:44)
+
+> 1 | db.mycollect.find({age:{$gte:'10',$lte:'32'})
+    |                                             ^
+  2 |
+
+newname> db.mycollect.find({age:{$gte:'10',$lte:'32'}})
+[
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  }
+]
+newname> db.mycollect.find({age:{$gte:'10',$lt:'32'}})
+[
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  }
+]
+newname> db.mycollect.find({profession:{$in:'student'}})
+MongoServerError[BadValue]: $in needs an array
+newname> db.mycollect.find({profession:[{$in:'student'}]})
+
+newname> db.mycollect.find({profession:[{$in:'Student'}]})
+
+newname> db.mycollect.find({profession:[{$in:'Student'}]})
+
+newname> db.mycollect.find({profession:[{$in:'Student'}]})
+
+newname> db.mycollect.find({profession:[{$in:'Student'},{$out:'Teacher'}]})
+
+newname> db.mycollect.find({profession:[{$in:'Student'}]})
+
+newname> db.mycollect.find({profession:[{$in:'Admin'}]})
+
+newname> db.mycollect.find({profession:{$in:['Admin']}})
+[
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  }
+]
+newname> db.mycollect.find({profession:{$nin:['Admin']}})
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  }
+]
+newname> db.mycollect.find({name:{$nin:['Sarath']}})
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  }
+]
+newname> db.mycollect.find({name:{$ne:['Sarath']}})
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  }
+]
+newname> db.mycollect.find({name:{$ne:["Sarath"]}})
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  }
+]
+newname> db.mycollect.find({name:{$ne:"Sarath"}})
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  }
+]
+newname> db.mycollect.find().limit(2)
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  }
+]
+newname> db.mycollect.find().sort()
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  }
+]
+newname> db.mycollect.find().sort({name:})
+Uncaught:
+SyntaxError: Unexpected token (1:31)
+
+> 1 | db.mycollect.find().sort({name:})
+    |                                ^
+  2 |
+
+newname> db.mycollect.find().dsort()
+TypeError: db.mycollect.find().dsort is not a function
+newname> db.mycollect.find().sort({name:-1})
+[
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  }
+]
+newname> db.mycollect.find().sort({name:0})
+MongoInvalidArgumentError: Invalid sort direction: 0
+newname> db.mycollect.find().sort({name:-1})
+[
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  }
+]
+newname> db.mycollect.find().sort({name:-1})
+[
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  }
+]
+newname> db.mycollect.find().sort({name:-1}).limit(2)
+[
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  }
+]
+newname> db.mycollect.find().sort({age:-1})
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  }
+]
+newname> db.mycollect.insertOne({name:"John",age:"22",profession:"Student"});
+{
+  acknowledged: true,
+  insertedId: ObjectId('6729c07274586f248e0d8195')
+}
+newname> db.mycollect.find().sort({age:-1})
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729c07274586f248e0d8195'),
+    name: 'John',
+    age: '22',
+    profession: 'Student'
+  }
+]
+newname> db.mycollect.find().sort({age:1,name:-1})
+[
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729c07274586f248e0d8195'),
+    name: 'John',
+    age: '22',
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  },
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  }
+]
+newname> db.mycollect.find().skip(2)
+[
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  },
+  {
+    _id: ObjectId('6729c07274586f248e0d8195'),
+    name: 'John',
+    age: '22',
+    profession: 'Student'
+  }
+]
+newname> db.mycollect.find().skip(2).limit(3)
+[
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  }
+]
+newname> db.mycollect.find().skip(2).limit(1)
+[
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  }
+]
+newname> db.mycollect.find({name:/^Me/i})
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  }
+]
+newname> db.mycollect.find({name:"Meenu"},{name:1,age:1})
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36'
+  }
+]
+newname> db.mycollect.find({name:"Meenu"},{name:1,age:_id:0})
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:48)
+
+> 1 | db.mycollect.find({name:"Meenu"},{name:1,age:_id:0})
+    |                                                 ^
+  2 |
+
+newname> db.mycollect.find({name:"Meenu"},{name:1,age:,_id:0})
+Uncaught:
+SyntaxError: Unexpected token (1:45)
+
+> 1 | db.mycollect.find({name:"Meenu"},{name:1,age:,_id:0})
+    |                                              ^
+  2 |
+
+newname> db.mycollect.find({name:"Meenu"},{name:1,age:1,_id:0})
+[ { name: 'Meenu', age: '36' } ]
+newname> db.mycollect.find({name:"Meenu"},{name:1,age:0})
+MongoServerError[Location31254]: Cannot do exclusion on field age in inclusion projection
+newname> db.mycollect.find({name:"Meenu"},{name:1})
+[ { _id: ObjectId('6729b1ab74586f248e0d8190'), name: 'Meenu' } ]
+newname> db.mycollect.find({name:"Meenu"},{name:1})
+[ { _id: ObjectId('6729b1ab74586f248e0d8190'), name: 'Meenu' } ]
+newname> db.mycollect.find({name:"Meenu"},{name:1},{prodession:1})
+[ { _id: ObjectId('6729b1ab74586f248e0d8190'), name: 'Meenu' } ]
+newname> db.mycollect.find({name:"Meenu"},{name:1,prodession:1})
+[ { _id: ObjectId('6729b1ab74586f248e0d8190'), name: 'Meenu' } ]
+newname> db.mycollect.find({name:"Meenu"},{name:1,prodession:1})
+[ { _id: ObjectId('6729b1ab74586f248e0d8190'), name: 'Meenu' } ]
+newname> db.mycollect.find({name:"Meenu"},{name:1,profession:1})
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    profession: 'Professor'
+  }
+]
+newname> db.mycollect.find({age:{$exists:false}})
+
+newname> db.mycollect.find({Profession:{$exists:false}})
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  },
+  {
+    _id: ObjectId('6729c07274586f248e0d8195'),
+    name: 'John',
+    age: '22',
+    profession: 'Student'
+  }
+]
+newname> db.mycollect.find({name:{$exists:false}})
+[
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  }
+]
+newname> db.mycollect.update({
+... db.mycollect.find({age:{$exists:false}})
+Uncaught:
+SyntaxError: Unexpected token, expected "," (2:2)
+
+  1 | db.mycollect.update({
+> 2 | db.mycollect.find({age:{$exists:false}})
+    |   ^
+  3 |
+
+newname> db.mycollect.updateOne({age:35},{$set:{age:35}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+newname> db.mycollect.show()
+TypeError: db.mycollect.show is not a function
+newname> db.mycollect.find()
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  },
+  {
+    _id: ObjectId('6729c07274586f248e0d8195'),
+    name: 'John',
+    age: '22',
+    profession: 'Student'
+  }
+]
+newname> db.mycollect.updateOne({age:35},{$set:{age:23}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+newname> db.mycollect.find()
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  },
+  {
+    _id: ObjectId('6729c07274586f248e0d8195'),
+    name: 'John',
+    age: '22',
+    profession: 'Student'
+  }
+]
+newname> db.mycollect.updateOne({age:36},{$set:{age:23}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+newname> db.mycollect.find()
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: '22',
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  },
+  {
+    _id: ObjectId('6729c07274586f248e0d8195'),
+    name: 'John',
+    age: '22',
+    profession: 'Student'
+  }
+]
+newname> db.mycollect.updateOne({name:'Sarath'},{$set:{age:age+3}})
+ReferenceError: age is not defined
+newname> db.mycollect.updateOne({name:'Sarath'},{$set:{age:+3}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+newname> db.mycollect.find()
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: 3,
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  },
+  {
+    _id: ObjectId('6729c07274586f248e0d8195'),
+    name: 'John',
+    age: '22',
+    profession: 'Student'
+  }
+]
+newname> db.mycollect.updateOne({name:'Sarath'},{$set:{age:22}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+newname> db.mycollect.find()
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: 22,
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  },
+  {
+    _id: ObjectId('6729c07274586f248e0d8195'),
+    name: 'John',
+    age: '22',
+    profession: 'Student'
+  }
+]
+newname> db.mycollect.updateOne({name:'Sarath'},{$set:{age:+3}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+newname> db.mycollect.find()
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: 3,
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  },
+  {
+    _id: ObjectId('6729c07274586f248e0d8195'),
+    name: 'John',
+    age: '22',
+    profession: 'Student'
+  }
+]
+newname> db.mycollect.updateOne({name:'Sarath'},{$set:{age:22}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+newname> db.mycollect.updateOne({name:'Sarath'},{$set:{age:++3}})
+Uncaught:
+SyntaxError: Invalid left-hand side in prefix operation. (1:52)
+
+> 1 | db.mycollect.updateOne({name:'Sarath'},{$set:{age:++3}})
+    |                                                     ^
+  2 |
+
+newname> db.mycollect.updateOne({name:'Sarath'},{$inc:{age:3}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+newname> db.mycollect.find()
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36',
+    profession: 'Professor'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: 25,
+    profession: 'Student'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31',
+    profession: 'Admin'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8194'),
+    age: '35',
+    profession: 'teacher'
+  },
+  {
+    _id: ObjectId('6729c07274586f248e0d8195'),
+    name: 'John',
+    age: '22',
+    profession: 'Student'
+  }
+]
+newname> db.mycollect.updateMany({profession:{$exists:true},{$unset:profession})
+Uncaught:
+SyntaxError: Unexpected token (1:51)
+
+> 1 | db.mycollect.updateMany({profession:{$exists:true},{$unset:profession})
+    |                                                    ^
+  2 |
+
+newname> db.mycollect.updateMany({profession:{$exists:true ,$unset:profession})
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:69)
+
+> 1 | db.mycollect.updateMany({profession:{$exists:true ,$unset:profession})
+    |                                                                      ^
+  2 |
+
+newname> db.mycollect.updateMany({profession:{$exists:true ,$unset:profession}})
+ReferenceError: profession is not defined
+newname> db.mycollect.updateMany({profession:{$exists:true} ,{$unset:profession}})
+Uncaught:
+SyntaxError: Unexpected token (1:52)
+
+> 1 | db.mycollect.updateMany({profession:{$exists:true} ,{$unset:profession}})
+    |                                                     ^
+  2 |
+
+newname> db.mycollect.updateMany({profession:{$exists:true} },{$unset:{profession=""} })
+... db.mycollect.updateMany({profession:{$exists:true} },{
+Uncaught:
+SyntaxError: Invalid shorthand property initializer. (1:72)
+
+> 1 | db.mycollect.updateMany({profession:{$exists:true} },{$unset:{profession=""} })
+    |                                                                         ^
+  2 | db.mycollect.updateMany({profession:{$exists:true} },{
+  3 |
+
+newname> db.mycollect.updateMany({profession:{$exists:true} },{$unset:{profession=""} }) db.mycollect.updateMany({profession:{$exists:true} },{
+Uncaught:
+SyntaxError: Invalid shorthand property initializer. (1:72)
+
+> 1 | db.mycollect.updateMany({profession:{$exists:true} },{$unset:{profession=""} }) db.mycollect.updateMany({profession:{$exists:true} },{
+    |                                                                         ^
+  2 |
+
+newname> db.mycollect.updateMany({profession:{$exists:true} ,{$unset:profession}})
+Uncaught:
+SyntaxError: Unexpected token (1:52)
+
+> 1 | db.mycollect.updateMany({profession:{$exists:true} ,{$unset:profession}})
+    |                                                     ^
+  2 |
+
+newname> db.mycollect.updateMany({profession:{$exists:true}},{$unset:{profession:""}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 5,
+  modifiedCount: 5,
+  upsertedCount: 0
+}
+newname> db.mycollect.find()
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: 25
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    name: 'Pradeep',
+    age: '31'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  { _id: ObjectId('6729b3df74586f248e0d8194'), age: '35' },
+  {
+    _id: ObjectId('6729c07274586f248e0d8195'),
+    name: 'John',
+    age: '22'
+  }
+]
+newname> db.mycollect.updateOne({name:"Pradeep"},{$rename:{name:"first Name"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+newname> db.mycollect.find()
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: 25
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    age: '31',
+    'first Name': 'Pradeep'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  { _id: ObjectId('6729b3df74586f248e0d8194'), age: '35' },
+  {
+    _id: ObjectId('6729c07274586f248e0d8195'),
+    name: 'John',
+    age: '22'
+  }
+]
+newname> db.mycollect.updateOne({name:"Sarath"},{$push:{hoobies:"games"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+newname> db.mycollect.find()
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: 25,
+    hoobies: [ 'games' ]
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    age: '31',
+    'first Name': 'Pradeep'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  { _id: ObjectId('6729b3df74586f248e0d8194'), age: '35' },
+  {
+    _id: ObjectId('6729c07274586f248e0d8195'),
+    name: 'John',
+    age: '22'
+  }
+]
+newname> db.mycollect.updateOne({name:"Sarath"},{$push:{hoobies:["games","swimming","football"]}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+newname> db.mycollect.find()
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: 25,
+    hoobies: [ 'games', [ 'games', 'swimming', 'football' ] ]
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    age: '31',
+    'first Name': 'Pradeep'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  { _id: ObjectId('6729b3df74586f248e0d8194'), age: '35' },
+  {
+    _id: ObjectId('6729c07274586f248e0d8195'),
+    name: 'John',
+    age: '22'
+  }
+]
+newname> db.mycollect.updateOne({name:"Sarath"},{$push:{hoobies:{$each:["games","swimming","football"]}}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+newname> db.mycollect.find()
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: 25,
+    hoobies: [
+      'games',
+      [ 'games', 'swimming', 'football' ],
+      'games',
+      'swimming',
+      'football'
+    ]
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    age: '31',
+    'first Name': 'Pradeep'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  { _id: ObjectId('6729b3df74586f248e0d8194'), age: '35' },
+  {
+    _id: ObjectId('6729c07274586f248e0d8195'),
+    name: 'John',
+    age: '22'
+  }
+]
+newname> db.mycollect.updateOne({name:"Sarath"},{$pull:{hoobies:{$each:["games","swimming","football"]}}})
+MongoServerError: unknown top level operator: $each. If you have a field name that starts with a '$' symbol, consider using $getField or $setField.
+newname> db.mycollect.updateOne({name:"Sarath"},{$pull:{hoobies:["games","swimming","football"]}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+newname> db.mycollect.find()
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: 25,
+    hoobies: [ 'games', 'games', 'swimming', 'football' ]
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    age: '31',
+    'first Name': 'Pradeep'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  { _id: ObjectId('6729b3df74586f248e0d8194'), age: '35' },
+  {
+    _id: ObjectId('6729c07274586f248e0d8195'),
+    name: 'John',
+    age: '22'
+  }
+]
+newname> db.mycollect.updateOne({name:"Sarath"},{$pull:{hoobies:["games"]}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+newname> db.mycollect.find()
+[
+  {
+    _id: ObjectId('6729b1ab74586f248e0d8190'),
+    name: 'Meenu',
+    age: '36'
+  },
+  {
+    _id: ObjectId('6729b28074586f248e0d8191'),
+    name: 'Sarath',
+    age: 25,
+    hoobies: [ 'games', 'games', 'swimming', 'football' ]
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8192'),
+    age: '31',
+    'first Name': 'Pradeep'
+  },
+  {
+    _id: ObjectId('6729b3df74586f248e0d8193'),
+    name: 'abey',
+    age: '32'
+  },
+  { _id: ObjectId('6729b3df74586f248e0d8194'), age: '35' },
+  {
+    _id: ObjectId('6729c07274586f248e0d8195'),
+    name: 'John',
+    age: '22'
+  }
+]
+newname>
